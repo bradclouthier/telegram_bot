@@ -160,8 +160,6 @@ def mock_reply(update: Update, context:CallbackContext) -> None:
     elif first_name in context.chat_data['users']:
         user_in_list = True
 
-    print(username, first_name)
-
     if get_bot_started(context) and user_in_list:
         update.message.reply_animation(
             animation='CgACAgQAAxkBAAM3YGEEfewX20iATx4Y0r4wGyPASPwAAo0CAAIfz5VSw4MlokquQZMeBA',
