@@ -4,7 +4,6 @@ Simple bot to repeatadly mock users
 
 import logging
 import re
-from uuid import uuid4
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 from telegram import Update, ForceReply, Animation
 from argparse import ArgumentParser
@@ -66,7 +65,7 @@ def message_handler(update: Update, context:CallbackContext) -> None:
         )
 
 
-def get_bot_started(context:CallbackContext) -> str:
+def get_bot_started(context:CallbackContext) -> bool:
     """
     Gets the status of the bot (ie start/stop)
     """
@@ -192,10 +191,17 @@ def teabag_command(update: Update, context:CallbackContext) -> None:
     user_key = user.replace('@', '').lower()
     file_id = 'CgACAgQAAxkBAAIBPWBhNzriFQYd_P98riAw_B2upiruAAI7AgACA1CNUqdpIuXarrPeHgQ'
 
+    if user_key not in context.chat_data['messages'].keys():
+        caption = "{} Has no messages so I'm teabagging you instead, {}".format(user, update.effective_user.first_name)
+        reply_to_message_id = update.message.message_id
+    else:
+        caption = "{} suck my balls".format(user)
+        reply_to_message_id = context.chat_data['messages'][user_key]
+
     update.message.reply_animation(
         animation=file_id,
-        caption='{} suck my balls'.format(user),
-        reply_to_message_id=context.chat_data['messages'][user_key]
+        caption=caption,
+        reply_to_message_id=reply_to_message_id
     )
 
 
